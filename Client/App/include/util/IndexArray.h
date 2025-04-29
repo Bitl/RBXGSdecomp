@@ -15,7 +15,7 @@ namespace RBX {
 		public:
 			G3D::Array<tInstance *> array;
 			inline tInstance* operator[](int index){ 
-				RBXASSERT(indexOf(array[index]) == index);
+				RBXAssert(indexOf(array[index]) == index);
 				return array[index]; 
 			}
 
@@ -24,11 +24,11 @@ namespace RBX {
 			// 100% match if G3D::Array<>::find has __declspec(noinline)
 			void fastRemove(tInstance* item)
 			{
-				RBXASSERT(array.find(item) != array.end());
+				RBXAssert(array.find(item) != array.end());
 
 				int removeIndex = indexOf(item);
-				RBXASSERT(removeIndex >= 0);
-				RBXASSERT(array[removeIndex] == item);
+				RBXAssert(removeIndex >= 0);
+				RBXAssert(array[removeIndex] == item);
 
 				// this does something similar to G3D::Array<>::fastRemove
 				tInstance* movedItem = array[size() - 1];
@@ -41,8 +41,8 @@ namespace RBX {
 
 			void fastAppend(tInstance* item)
 			{
-				RBXASSERT(item);
-				RBXASSERT(indexOf(item) == -1);
+				RBXAssert(item);
+				RBXAssert(indexOf(item) == -1);
 				indexOf(item) = array.size();
 				array.append(item);
 			}

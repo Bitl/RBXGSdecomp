@@ -290,21 +290,21 @@ namespace RBX
 
 	G3D::uint8 rotationToByteBase(float angle)
 	{
-		RBXASSERT(angle <= Math::pi());
-		RBXASSERT(angle >= -Math::pi());
+		RBXAssert(angle <= Math::pi());
+		RBXAssert(angle >= -Math::pi());
 
 		float result = (angle + Math::pi()) / segSizeRadians();
 		int resInt = G3D::iRound(result);
 		
-		RBXASSERT(resInt >= -1);
-		RBXASSERT(resInt <= 256);
+		RBXAssert(resInt >= -1);
+		RBXAssert(resInt <= 256);
 
 		resInt = std::max(0, resInt);
 		resInt = std::min(255, resInt);
 
 		G3D::uint8 byte = (G3D::uint8)resInt;
 
-		RBXASSERT(byte <= 255);
+		RBXAssert(byte <= 255);
 
 		return byte;
 	}

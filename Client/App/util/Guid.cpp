@@ -33,7 +33,7 @@ namespace RBX
 
 	void Guid::assign(Guid::Data data)
 	{
-		RBXASSERT(this->data.scope == localScope);
+		RBXAssert(this->data.scope == localScope);
 		this->data = data;
 	}
 
@@ -93,7 +93,7 @@ namespace RBX
 			default:
 				if (comparison != 1)
 				{
-					RBXASSERT(0);
+					RBXAssert(0);
 				}
 
 				return false;

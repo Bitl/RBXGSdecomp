@@ -5,7 +5,7 @@ namespace RBX
 {
 	void ContactConnector::computeForce(const float dt, bool throttling)
 	{
-		RBXASSERT(!throttling || !this->canThrottle());
+		RBXAssert(!throttling || !this->canThrottle());
 
 		PairParams params;
 		this->geoPair.computeLengthNormalPosition(params);
@@ -80,7 +80,7 @@ namespace RBX
 	{
 		this->point0->accumulateForce(-force);
 		this->point1->accumulateForce(force);
-		RBXASSERT(force.magnitude() < Math::inf());
+		RBXAssert(force.magnitude() < Math::inf());
 	}
 
 	void PointToPointBreakConnector::computeForce(const float dt, bool throttling)

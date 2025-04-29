@@ -56,11 +56,11 @@ namespace RBX {
 			}
 			virtual void stepWorld(int worldStepId, int uiStepId, bool throttling) //not checked if matching
 			{
-				RBXASSERT(downstream);
+				RBXAssert(downstream);
 				downstream->stepWorld(worldStepId, uiStepId, throttling);
 			}
 			virtual Kernel* getKernel(){
-				RBXASSERT(downstream);
+				RBXAssert(downstream);
 				return downstream->getKernel(); 
 			};
 			RBX::IStage* getDownstream() {return downstream;};

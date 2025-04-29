@@ -26,13 +26,13 @@ namespace RBX
 		  jointCoord0(),
 		  jointCoord1()
 	{
-		RBXASSERT(jointCoord0 == CoordinateFrame());
-		RBXASSERT(jointCoord1 == CoordinateFrame());
+		RBXAssert(jointCoord0 == CoordinateFrame());
+		RBXAssert(jointCoord1 == CoordinateFrame());
 	}
 
 	Joint::~Joint()
 	{
-		RBXASSERT(!jointOwner);
+		RBXAssert(!jointOwner);
 	}
 
 	void Joint::setPrimitive(int i, Primitive* p)
@@ -50,7 +50,7 @@ namespace RBX
 
 	void Joint::setJointOwner(IJointOwner* value)
 	{
-		RBXASSERT((value == NULL) != (jointOwner == NULL));
+		RBXAssert((value == NULL) != (jointOwner == NULL));
 		jointOwner = value;
 	}
 

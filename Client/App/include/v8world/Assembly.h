@@ -57,7 +57,7 @@ namespace RBX
 			bool operator==(const PrimIterator&) const;
 			__forceinline bool operator!=(const PrimIterator& other) const
 			{
-				RBXASSERT(clumpIterator == other.clumpIterator);
+				RBXAssert(clumpIterator == other.clumpIterator);
 				return clumpIterator == other.clumpIterator && primIterator == other.primIterator && assembly == other.assembly;
 			}
 			PrimIterator& operator++();

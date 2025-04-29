@@ -17,13 +17,13 @@ namespace RBX
 
 		if (body1->getParent() == body0)
 		{
-			RBXASSERT(body0->getParent() != body1);
-			RBXASSERT(prim0->getClump() == prim1->getClump());
+			RBXAssert(body0->getParent() != body1);
+			RBXAssert(prim0->getClump() == prim1->getClump());
 			return prim0;
 		}
 		else if (body0->getParent() == body1)
 		{
-			RBXASSERT(prim0->getClump() == prim1->getClump());
+			RBXAssert(prim0->getClump() == prim1->getClump());
 			return prim1;
 		}
 
@@ -77,15 +77,15 @@ namespace RBX
 
 	void Clump::addAnchor(Anchor* a)
 	{
-		RBXASSERT(!anchor);
-		RBXASSERT(a->getPrimitive() == rootPrimitive);
+		RBXAssert(!anchor);
+		RBXAssert(a->getPrimitive() == rootPrimitive);
 
 		anchor = a;
 	}
 
 	Anchor* Clump::removeAnchor()
 	{
-		RBXASSERT(anchor);
+		RBXAssert(anchor);
 
 		Anchor* a = anchor;
 		anchor = NULL;
@@ -187,28 +187,28 @@ namespace RBX
 	bool Clump::spanningTreeAdjust(RigidJoint* removing)
 	{
 		Primitive* prim = SpanLink::isSpanningJoint(removing);
-		RBXASSERT(prim);
+		RBXAssert(prim);
 
 		Primitive* otherPrim = removing->otherPrimitive(prim);
-		RBXASSERT(otherPrim->getClumpDepth() == prim->getClumpDepth() + 1);
+		RBXAssert(otherPrim->getClumpDepth() == prim->getClumpDepth() + 1);
 
 		SpanLink bestLink = findBestOutsideLink(otherPrim, otherPrim);
 		RigidJoint* joint = bestLink.joint;
 		Primitive* parent = bestLink.parent;
 		if (parent)
 		{
-			RBXASSERT(joint != removing);
+			RBXAssert(joint != removing);
 
 			Primitive* otherPrimLink = joint->otherPrimitive(parent);
-			RBXASSERT(inSpanTree(otherPrimLink, prim));
-			RBXASSERT(inSpanTree(otherPrimLink, otherPrim));
-			RBXASSERT(!inSpanTree(parent, otherPrim));
+			RBXAssert(inSpanTree(otherPrimLink, prim));
+			RBXAssert(inSpanTree(otherPrimLink, otherPrim));
+			RBXAssert(!inSpanTree(parent, otherPrim));
 
 			setSpanParent(otherPrimLink, removing);
 			setParent(otherPrimLink, parent);
 			renumberSpanTree(otherPrimLink);
 
-			RBXASSERT(inSpanTree(otherPrim, otherPrimLink));
+			RBXAssert(inSpanTree(otherPrim, otherPrimLink));
 			
 			return true;
 		}
@@ -218,25 +218,25 @@ namespace RBX
 
 	Body* Clump::getRootBody() const
 	{
-		RBXASSERT(primitives.size() > 0);
+		RBXAssert(primitives.size() > 0);
 		return rootPrimitive->getBody();
 	}
 
 	void Clump::putInKernel(Kernel* kernel)
 	{
-		RBXASSERT(!anchor);
+		RBXAssert(!anchor);
 		return kernel->insertBody(getRootBody());
 	}
 
 	void Clump::removeFromKernel(Kernel* kernel)
 	{
-		RBXASSERT(primitives.size() > 0);
+		RBXAssert(primitives.size() > 0);
 		return kernel->removeBody(getRootBody());
 	}
 
 	void Clump::setSleepStatus(Sim::AssemblyState _set)
 	{
-		RBXASSERT(primitives.size() > 0);
+		RBXAssert(primitives.size() > 0);
 		if (_set != sleepStatus)
 		{
 			if (_set == Sim::AWAKE)
@@ -254,20 +254,20 @@ namespace RBX
 
 	void Clump::addPrimitive(Primitive* p, Primitive* parent, RigidJoint* j)
 	{
-		RBXASSERT(!p->getAnchorObject());
-		RBXASSERT(!p->getClump());
-		RBXASSERT(p->getClumpDepth() == -1);
+		RBXAssert(!p->getAnchorObject());
+		RBXAssert(!p->getClump());
+		RBXAssert(p->getClumpDepth() == -1);
 
 		p->setClump(this);
 		setParent(p, parent);
 		bool success = primitives.insert(p).second;
-		RBXASSERT(success);
+		RBXAssert(success);
 		canSleep = canSleep && p->getCanSleep();
 	}
 
 	void Clump::onPrimitiveCanSleepChanged(Primitive* p)
 	{
-		RBXASSERT(containsPrimitive(p));
+		RBXAssert(containsPrimitive(p));
 		bool primCanSleep = p->getCanSleep();
 		if (primCanSleep)
 		{
@@ -283,7 +283,7 @@ namespace RBX
 
 	bool Clump::calcShouldSleep()
 	{
-		RBXASSERT(primitives.size() > 0);
+		RBXAssert(primitives.size() > 0);
 
 		G3D::CoordinateFrame cofm = rootPrimitive->getBody()->getBranchCofmCoordinateFrame();
 		runningAverageState.update(cofm, MaxRadius);
@@ -293,7 +293,7 @@ namespace RBX
 
 	bool Clump::okNeighborSleep()
 	{
-		RBXASSERT(primitives.size() > 0);
+		RBXAssert(primitives.size() > 0);
 
 		G3D::CoordinateFrame cofm = rootPrimitive->getBody()->getBranchCofmCoordinateFrame();
 		return runningAverageState.withinTolerance(cofm, MaxRadius, 0.02f);
@@ -301,7 +301,7 @@ namespace RBX
 
 	bool Clump::forceNeighborAwake()
 	{
-		RBXASSERT(primitives.size() > 0);
+		RBXAssert(primitives.size() > 0);
 
 		G3D::CoordinateFrame cofm = rootPrimitive->getBody()->getBranchCofmCoordinateFrame();
 		return !runningAverageState.withinTolerance(cofm, MaxRadius, 0.04f);
@@ -323,7 +323,7 @@ namespace RBX
 	void Clump::addInconsistent(RigidJoint* r)
 	{
 		bool success = inconsistentJoints.insert(r).second;
-		RBXASSERT(success);
+		RBXAssert(success);
 	}
 
 	bool Clump::containsInconsistent(RigidJoint* r)
@@ -338,16 +338,16 @@ namespace RBX
 
 	Clump::~Clump()
 	{
-		RBXASSERT(!rootPrimitive);
-		RBXASSERT(primitives.size() == 0);
-		RBXASSERT(inconsistentJoints.size() == 0);
-		RBXASSERT(!anchor);
+		RBXAssert(!rootPrimitive);
+		RBXAssert(primitives.size() == 0);
+		RBXAssert(inconsistentJoints.size() == 0);
+		RBXAssert(!anchor);
 	}
 
 	void Clump::removeInconsistent(RigidJoint* r)
 	{
 		size_t count = inconsistentJoints.erase(r);
-		RBXASSERT(count == 1);
+		RBXAssert(count == 1);
 	}
 
 	void Clump::removePrimitive(Primitive* p)
@@ -361,7 +361,7 @@ namespace RBX
 		p->getBody()->setParent(NULL);
 
 		size_t count = primitives.erase(p);
-		RBXASSERT(count == 1);
+		RBXAssert(count == 1);
 
 		canSleep = computeCanSleep();
 	}
@@ -379,7 +379,7 @@ namespace RBX
 		  inconsistentJoints(),
 		  MaxRadius(this, &Clump::computeMaxRadius)
 	{
-		RBXASSERT(root->getClumpDepth() == -1);
+		RBXAssert(root->getClumpDepth() == -1);
 		primitives.insert(root);
 		root->setClump(this);
 		root->setClumpDepth(0);
@@ -397,7 +397,7 @@ namespace RBX
 	// inling problem with the 2nd deque.push_back prevents matching
 	void Clump::getRigidJoints(std::set<RigidJoint*>& internalRigids, std::set<RigidJoint*>& externalRigids)
 	{
-		RBXASSERT(rootPrimitive);
+		RBXAssert(rootPrimitive);
 
 		std::deque<Primitive*> deque;
 		deque.push_back(rootPrimitive);

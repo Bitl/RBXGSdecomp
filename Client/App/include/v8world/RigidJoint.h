@@ -9,7 +9,7 @@ namespace RBX
 		// these seem to be the same as Joint
 		virtual Joint::JointType getJointType() const
 		{
-			RBXASSERT(0);
+			RBXAssert(0);
 			return NO_JOINT;
 		}
 		virtual bool isBroken() const

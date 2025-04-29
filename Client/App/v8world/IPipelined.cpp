@@ -5,7 +5,7 @@ namespace RBX
 {
 	IStage* IPipelined::getStage(IStage::StageType stageType) const
 	{
-		RBXASSERT(currentStage);
+		RBXAssert(currentStage);
 
 		IStage* stage = currentStage;
 		while (stage->getStageType() != stageType)
@@ -20,44 +20,44 @@ namespace RBX
 
 	void IPipelined::putInPipeline(IStage* stage)
 	{
-		RBXASSERT(stage);
-		RBXASSERT(!currentStage);
+		RBXAssert(stage);
+		RBXAssert(!currentStage);
 
 		currentStage = stage;
 	}
 
 	void IPipelined::removeFromPipeline(IStage* stage)
 	{
-		RBXASSERT(stage);
-		RBXASSERT(currentStage);
-		RBXASSERT(currentStage == stage);
+		RBXAssert(stage);
+		RBXAssert(currentStage);
+		RBXAssert(currentStage == stage);
 
 		currentStage = NULL;
 	}
 
 	void IPipelined::putInStage(IStage* stage)
 	{
-		RBXASSERT(stage);
-		RBXASSERT(currentStage);
-		RBXASSERT(stage->getUpstream() == currentStage);
-		RBXASSERT(currentStage->getDownstream() == stage);
+		RBXAssert(stage);
+		RBXAssert(currentStage);
+		RBXAssert(stage->getUpstream() == currentStage);
+		RBXAssert(currentStage->getDownstream() == stage);
 
 		currentStage = stage;
 	}
 
 	void IPipelined::removeFromStage(IStage* stage)
 	{
-		RBXASSERT(currentStage);
-		RBXASSERT(stage);
-		RBXASSERT(stage == currentStage);
-		RBXASSERT(stage->getUpstream());
+		RBXAssert(currentStage);
+		RBXAssert(stage);
+		RBXAssert(stage == currentStage);
+		RBXAssert(stage->getUpstream());
 
 		currentStage = currentStage->getUpstream();
 	}
 
 	Kernel* IPipelined::getKernel() const
 	{
-		RBXASSERT(this->inKernel());
+		RBXAssert(this->inKernel());
 
 		IStage* stage = this->getStage(IStage::KERNEL_STAGE);
 		return rbx_static_cast<Kernel*>(stage);
@@ -70,8 +70,8 @@ namespace RBX
 
 	void IPipelined::removeFromKernel()
 	{
-		RBXASSERT(currentStage);
-		RBXASSERT(currentStage->getStageType() == IStage::KERNEL_STAGE);
+		RBXAssert(currentStage);
+		RBXAssert(currentStage->getStageType() == IStage::KERNEL_STAGE);
 
 		this->removeFromStage(currentStage);
 	}

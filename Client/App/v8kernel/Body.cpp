@@ -21,22 +21,22 @@ Body::Body()
 
 Body::~Body()
 {
-	RBXASSERT(numChildren() == 0);
+	RBXAssert(numChildren() == 0);
 	if (parent)
 		setParent(NULL);
-	RBXASSERT(!parent);
-	RBXASSERT(!link);
-	RBXASSERT(index == -1);
-	RBXASSERT(simBody);
+	RBXAssert(!parent);
+	RBXAssert(!link);
+	RBXAssert(index == -1);
+	RBXAssert(simBody);
 	delete simBody;
 	simBody = NULL;
-	RBXASSERT(!cofm);
-	RBXASSERT(root == this);
+	RBXAssert(!cofm);
+	RBXAssert(root == this);
 }
 
 void Body::updatePV() const
 {
-	RBXASSERT((parent != NULL) || (getRootConst() == this));
+	RBXAssert((parent != NULL) || (getRootConst() == this));
 
 	if (parent && this->stateIndex != getRootConst()->getStateIndex())
 	{
@@ -50,7 +50,7 @@ void Body::updatePV() const
 
 void Body::resetRoot(RBX::Body* newRoot)
 {
-	RBXASSERT(newRoot == calcRoot());
+	RBXAssert(newRoot == calcRoot());
 	root = newRoot;
 	for (int i = 0; i < children.size(); i++)
 	{
@@ -80,8 +80,8 @@ void Body::advanceStateIndex()
 
 bool Body::validateParentCofmDirty()
 {
-	RBXASSERT(cofm);
-	RBXASSERT(cofm->getIsDirty());
+	RBXAssert(cofm);
+	RBXAssert(cofm->getIsDirty());
 	if (getParent())
 		getParent()->validateParentCofmDirty();
 	return true;
@@ -96,30 +96,30 @@ void Body::makeCofmDirty()
 		{
 			if (parent)
 				parent->validateParentCofmDirty();
-			RBXASSERT(getRootSimBody()->getDirty());
+			RBXAssert(getRootSimBody()->getDirty());
 		}
 	}
 	else
 	{
 		if (getParent())
 		{
-			RBXASSERT(!simBody);
+			RBXAssert(!simBody);
 			getParent()->makeCofmDirty();
 		}
 		else
 		{
-			RBXASSERT(root == this);
+			RBXAssert(root == this);
 			if (simBody)
 				simBody->makeDirty();
 		}
 		if (cofm)
 		{
 			cofm->makeDirty();
-			RBXASSERT(numChildren() > 0);
+			RBXAssert(numChildren() > 0);
 		}
 		else
 		{
-			RBXASSERT(!numChildren());
+			RBXAssert(!numChildren());
 		}
 	}
 }
@@ -130,14 +130,14 @@ void Body::onChildAdded(RBX::Body* child)
 	children.fastAppend(child);
 	if (!cofm)
 	{
-		RBXASSERT(numChildren() == 1);
+		RBXAssert(numChildren() == 1);
 		cofm = new Cofm(this);
 	}
 }
 
 void Body::onChildRemoved(RBX::Body* child)
 {
-	RBXASSERT(cofm);
+	RBXAssert(cofm);
 	children.fastRemove(child);
 	if (numChildren() == 0)
 	{
@@ -158,8 +158,8 @@ void Body::setMass(float _mass)
 
 void Body::step(float dt, bool throttling)
 {
-	RBXASSERT(!getParent());
-	RBXASSERT(simBody);
+	RBXAssert(!getParent());
+	RBXAssert(simBody);
 
 	if (throttling && canThrottle)
 	{
@@ -187,8 +187,8 @@ void Body::setVelocity(const Velocity& worldVelocity)
 
 void Body::setParent(Body* newParent)
 {
-	RBXASSERT(!newParent || newParent->getParent() != this);
-	RBXASSERT(newParent != this);
+	RBXAssert(!newParent || newParent->getParent() != this);
+	RBXAssert(newParent != this);
 
 	if (parent != newParent)
 	{
@@ -200,14 +200,14 @@ void Body::setParent(Body* newParent)
 
 		if (getParent())
 		{
-			RBXASSERT(root == getParent()->getRoot());
-			RBXASSERT(!simBody);
+			RBXAssert(root == getParent()->getRoot());
+			RBXAssert(!simBody);
 			parent->onChildRemoved(this);
 		}
 		else
 		{
-			RBXASSERT(root = this);
-			RBXASSERT(simBody);
+			RBXAssert(root = this);
+			RBXAssert(simBody);
 			delete simBody;
 			simBody = NULL;
 		}
@@ -242,12 +242,12 @@ G3D::CoordinateFrame Body::getMeInDescendant(const Body* descendant) const
 	}
 	else if (descendant == parent)
 	{
-		RBXASSERT(parent);
+		RBXAssert(parent);
 		return getLink() ? getLink()->getChildInParent() : meInParent;
 	}
 	else
 	{
-		RBXASSERT(parent);
+		RBXAssert(parent);
 		return parent->getMeInDescendant(descendant) * meInParent;
 	}
 }
@@ -256,7 +256,7 @@ void Body::setPv(const PV& _pv)
 {
 	if (parent)
 	{
-		RBXASSERT(0);
+		RBXAssert(0);
 	}
 	else
 	{
@@ -265,11 +265,11 @@ void Body::setPv(const PV& _pv)
 			simBody->makeDirty();
 		advanceStateIndex();
 	}
-	RBXASSERT(Math::longestVector3Component(pv.position.translation) < 1000000.0);
-	RBXASSERT(Math::isOrthonormal(pv.position.rotation));
-	RBXASSERT(!Math::isNanInfDenormVector3(pv.position.translation));
-	RBXASSERT(!Math::isNanInfDenormVector3(pv.velocity.linear));
-	RBXASSERT(!Math::isNanInfDenormVector3(pv.velocity.rotational));
+	RBXAssert(Math::longestVector3Component(pv.position.translation) < 1000000.0);
+	RBXAssert(Math::isOrthonormal(pv.position.rotation));
+	RBXAssert(!Math::isNanInfDenormVector3(pv.position.translation));
+	RBXAssert(!Math::isNanInfDenormVector3(pv.velocity.linear));
+	RBXAssert(!Math::isNanInfDenormVector3(pv.velocity.rotational));
 }
 
 void Body::setCoordinateFrame(const G3D::CoordinateFrame& worldCord)
@@ -280,11 +280,11 @@ void Body::setCoordinateFrame(const G3D::CoordinateFrame& worldCord)
 
 void Body::setMeInParent(const G3D::CoordinateFrame& _meInParent)
 {
-	RBXASSERT(Math::longestVector3Component(_meInParent.translation) < 1000000.0);
+	RBXAssert(Math::longestVector3Component(_meInParent.translation) < 1000000.0);
 
 	if (getLink())
 	{
-		RBXASSERT(0);
+		RBXAssert(0);
 		getLink()->setBody(NULL);
 		link = NULL;
 	}
@@ -297,7 +297,7 @@ void Body::setMeInParent(const G3D::CoordinateFrame& _meInParent)
 	}
 	else
 	{
-		RBXASSERT(0);
+		RBXAssert(0);
 	}
 }
 

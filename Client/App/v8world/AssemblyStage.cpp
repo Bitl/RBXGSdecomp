@@ -15,8 +15,8 @@ namespace RBX
 
 	AssemblyStage::~AssemblyStage()
 	{
-		RBXASSERT(assemblies.empty());
-		RBXASSERT(joints.empty());
+		RBXAssert(assemblies.empty());
+		RBXAssert(joints.empty());
 	}
 
 	void AssemblyStage::stepUi(int uiStepId)
@@ -39,13 +39,13 @@ namespace RBX
 	void AssemblyStage::onJointAdded(Joint* j)
 	{
 		bool inserted = joints.insert(j).second;
-		RBXASSERT(inserted);
+		RBXAssert(inserted);
 	}
 
 	void AssemblyStage::onJointRemoving(Joint* j)
 	{
 		size_t removed = joints.erase(j);
-		RBXASSERT(removed == 1);
+		RBXAssert(removed == 1);
 	}
 
 	void AssemblyStage::onEdgeAdded(Edge* e)
@@ -75,7 +75,7 @@ namespace RBX
 		assembly->putInStage(this);
 
 		bool inserted = assemblies.insert(assembly).second;
-		RBXASSERT(inserted);
+		RBXAssert(inserted);
 
 		if (!assembly->getAnchored())
 			rbx_static_cast<CollisionStage*>(getDownstreamWS())->onAssemblyAdded(assembly);
@@ -86,10 +86,10 @@ namespace RBX
 		if (assembly->downstreamOfStage(this))
 			rbx_static_cast<CollisionStage*>(getDownstreamWS())->onAssemblyRemoving(assembly);
 
-		RBXASSERT(assembly->inStage(this));
+		RBXAssert(assembly->inStage(this));
 
 		size_t removed = assemblies.erase(assembly);
-		RBXASSERT(removed == 1);
+		RBXAssert(removed == 1);
 
 		assembly->removeFromStage(this);
 	}

@@ -15,7 +15,7 @@ namespace RBX
 
 	void IMoving::makeMoving()
 	{
-		RBXASSERT(stepsToSleep > 0);
+		RBXAssert(stepsToSleep > 0);
 		onCanAggregateChanged(false);
 		if (iMovingManager)
 		{
@@ -38,7 +38,7 @@ namespace RBX
 
 	bool IMoving::checkSleep()
 	{
-		RBXASSERT(stepsToSleep > 0);
+		RBXAssert(stepsToSleep > 0);
 		
 		if (stepsToSleep > 1)
 		{
@@ -46,7 +46,7 @@ namespace RBX
 			return false;
 		}
 
-		RBXASSERT(stepsToSleep == 1);
+		RBXAssert(stepsToSleep == 1);
 		stepsToSleep = 0;
 		onCanAggregateChanged(false);
 		return true;
@@ -77,8 +77,8 @@ namespace RBX
 
 	IMovingManager::~IMovingManager()
 	{
-		RBXASSERT(current == moving.end());
-		RBXASSERT(moving.empty());
+		RBXAssert(current == moving.end());
+		RBXAssert(moving.empty());
 	}
 
 	void IMovingManager::remove(IMoving* iMoving)
@@ -96,7 +96,7 @@ namespace RBX
 
 	void IMovingManager::onMovingHeartbeat()
 	{
-		RBXASSERT(current == moving.end());
+		RBXAssert(current == moving.end());
 
 		current = moving.begin();
 		while (current != moving.end())

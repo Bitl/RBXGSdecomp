@@ -35,8 +35,8 @@ namespace RBX
 
 	MultiJoint::~MultiJoint()
 	{
-		RBXASSERT(connector[0] == NULL);
-		RBXASSERT(numConnector == 0);
+		RBXAssert(connector[0] == NULL);
+		RBXAssert(numConnector == 0);
 	}
 
 	void MultiJoint::putInKernel(Kernel* _kernel)
@@ -46,7 +46,7 @@ namespace RBX
 
 	void MultiJoint::addToMultiJoint(Point* point0, Point* point1, Connector* _connector)
 	{
-		RBXASSERT(numConnector < 4);
+		RBXAssert(numConnector < 4);
 
 		point[(numConnector*2)] = point0;
 		point[(numConnector*2)+1] = point1;
@@ -58,26 +58,26 @@ namespace RBX
 
 	Point* MultiJoint::getPoint(int id)
 	{
-		RBXASSERT(id < 8);
-		RBXASSERT(point[id]);
+		RBXAssert(id < 8);
+		RBXAssert(point[id]);
 		return point[id];
 	}
 
 	void MultiJoint::removeFromKernel()
 	{
-		RBXASSERT(this->inKernel());
+		RBXAssert(this->inKernel());
 
 		for (int i = 0; i < numConnector; i++)
 		{
-			RBXASSERT(point[(i*2)]);
-			RBXASSERT(point[(i*2)+1]);
+			RBXAssert(point[(i*2)]);
+			RBXAssert(point[(i*2)+1]);
 
 			getKernel()->deletePoint(point[(i*2)]);
 			getKernel()->deletePoint(point[(i*2)+1]);
 			point[(i*2)] = NULL;
 			point[(i*2)+1] = NULL;
 
-			RBXASSERT(connector[i]);
+			RBXAssert(connector[i]);
 
 			getKernel()->removeConnector(connector[i]);
 			delete connector[i];
@@ -87,17 +87,17 @@ namespace RBX
 		numConnector = 0;
 
 		IPipelined::removeFromKernel();
-		RBXASSERT(!this->inKernel());
+		RBXAssert(!this->inKernel());
 	}
 
 	bool MultiJoint::isBroken() const
 	{
-		RBXASSERT(numBreakingConnectors <= numConnector);
-		RBXASSERT(this->inKernel());
+		RBXAssert(numBreakingConnectors <= numConnector);
+		RBXAssert(this->inKernel());
 
 		for (int i = 0; i < numBreakingConnectors; i++)
 		{
-			RBXASSERT(connector[i]);
+			RBXAssert(connector[i]);
 			if (connector[i]->getBroken())
 				return true;
 		}
